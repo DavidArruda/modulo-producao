@@ -13,7 +13,15 @@ public class BeanUsuario {
 	private String nome;
 	private String login;
 	private String senha;
-	private Long tipo_usuario;
+	private BeanTipoUsuario tipo_usuario = new BeanTipoUsuario();
+	
+	public BeanTipoUsuario getTipo_usuario() {
+		return tipo_usuario;
+	}
+
+	public void setTipo_usuario(BeanTipoUsuario tipo_usuario) {
+		this.tipo_usuario = tipo_usuario;
+	}
 
 	public Long getCodUsuario() {
 		return codUsuario;
@@ -45,14 +53,6 @@ public class BeanUsuario {
 
 	public void setSenha(String senha) {
 		this.senha = senha;
-	}
-
-	public Long getTipo_usuario() {
-		return tipo_usuario;
-	}
-
-	public void setTipo_usuario(Long tipo_usuario) {
-		this.tipo_usuario = tipo_usuario;
 	}
 
 }
