@@ -10,16 +10,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import beans.BeanTipoUsuario;
 import beans.BeanUsuario;
 import connection.SingleConnection;
 
 /**
- * @author deh0_
+ * @author david
  *
  */
 public class DaoUsuario {
 
-	private Connection connection;
+	Connection connection;
 
 	public DaoUsuario() {
 		connection = SingleConnection.getConnection();
@@ -27,151 +28,139 @@ public class DaoUsuario {
 
 	public void salvar(BeanUsuario usuario) {
 
-		String sql = "insert into usuario (nome, login, senha, tipo_usuario" + " values (?, ?, ?, ?)";
+		String sql = "insert into usuario (nome, login, senha, tipo_usuario) values(?, ?, ?, ?)";
 
 		try {
 			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setString(1, usuario.getLogin());
-			statement.setString(2, usuario.getSenha());
-			statement.setString(3, usuario.getNome());
-			statement.setLong(4, usuario.getTipo_usuario());
-			statement.execute();
+			statement.setString(1, usuario.getNome());
+			statement.setString(2, usuario.getLogin());
+			statement.setString(3, usuario.getSenha());
+			statement.setLong(4, usuario.getTipo_usuario().getCodTipo());
 
+			statement.execute();
 			connection.commit();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+
 			try {
 				connection.rollback();
-			} catch (SQLException e1) {
 
+			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
 		}
 	}
 
-	public List<BeanUsuario> listar(String descricaoconsulta) throws SQLException {
-		String sql = "select * from usuario where login <> 'admin' and nome like'%" + descricaoconsulta + "%'";
-		return consultarUsuarios(sql);
-	}
+	public List<BeanTipoUsuario> listaTipoUsuario() throws Exception {
+		List<BeanTipoUsuario> retorno = new ArrayList<BeanTipoUsuario>();
 
-	public List<BeanUsuario> listar() throws Exception {
+		String sql = "select * from tipo_usuario";
+		
+		PreparedStatement statement = connection.prepareStatement(sql);
 
-		String sql = "select * from usuario where login <> 'admin'";
-		return consultarUsuarios(sql);
-
-	}
-
-	private List<BeanUsuario> consultarUsuarios(String sql) throws SQLException {
-
-		List<BeanUsuario> lista = new ArrayList<BeanUsuario>();
-		PreparedStatement select = connection.prepareStatement(sql);
-		ResultSet resultSet = select.executeQuery();
+		ResultSet resultSet = statement.executeQuery();
 
 		while (resultSet.next()) {
+			BeanTipoUsuario categoria = new BeanTipoUsuario();
+			categoria.setCodTipo(resultSet.getLong("codTipo"));
+			categoria.setDescricao(resultSet.getString("descricao"));
+			categoria.setSetor(resultSet.getString("setor"));
+
+			retorno.add(categoria);
+		}
+
+		return retorno;
+
+	}
+	
+	
+	public List<BeanUsuario> listar() throws Exception {
+		List<BeanUsuario> lista = new ArrayList<BeanUsuario>();
+
+		String sql = "select us.codUsuario, us.nome, us.login, us.senha, tp.descricao\n" + 
+				"	from usuario us left outer join tipo_usuario tp on us.tipo_usuario = tp.codTipo;";
+
+		PreparedStatement statement = connection.prepareStatement(sql);
+		ResultSet resultSet = statement.executeQuery();
+
+		while (resultSet.next()) {
+
 			BeanUsuario usuario = new BeanUsuario();
+			BeanTipoUsuario tpUsuario = new BeanTipoUsuario();
+			
 			usuario.setCodUsuario(resultSet.getLong("codUsuario"));
 			usuario.setNome(resultSet.getString("nome"));
 			usuario.setLogin(resultSet.getString("login"));
 			usuario.setSenha(resultSet.getString("senha"));
-			usuario.setTipo_usuario(resultSet.getLong("tipo_usuario"));
+			usuario.getTipo_usuario().setDescricao(resultSet.getString("descricao"));
 
 			lista.add(usuario);
+
 		}
+
 		return lista;
-
 	}
 
-	public void delete(String id) {
+	public BeanUsuario consultar(String codUsuario) throws Exception { //consulta para atualização
 
-		try {
-
-			String sql = "delete from usuario where codUsuario = '" + id + "' and login <> 'admin'";
-
-			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.execute();
-			connection.commit();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-
-			try {
-				connection.rollback();
-			} catch (SQLException e1) {
-
-				e1.printStackTrace();
-			}
-
-		}
-
-	}
-
-	public BeanUsuario consultar(String codUsuario) throws Exception { // consulta para realizar update
-
-		String sql = ("select * from usuario where codUsuario ='" + codUsuario + "' and login <> 'admin'");
+		String sql = ("select * from usuario where codUsuario ='" + codUsuario + "'");
 
 		PreparedStatement statement = connection.prepareStatement(sql);
 		ResultSet resultSet = statement.executeQuery();
 
 		if (resultSet.next()) {
 			BeanUsuario usuario = new BeanUsuario();
-
 			usuario.setCodUsuario(resultSet.getLong("codUsuario"));
 			usuario.setNome(resultSet.getString("nome"));
 			usuario.setLogin(resultSet.getString("login"));
 			usuario.setSenha(resultSet.getString("senha"));
-			usuario.setTipo_usuario(resultSet.getLong("tipo_usuario"));
+			usuario.getTipo_usuario().setCodTipo(resultSet.getLong("tipo_usuario"));
 
 			return usuario;
 		}
 		return null;
 	}
 
-	public Boolean validarLogin(String login) throws Exception {
-
-		String sql = ("select count(1) as qtd from usuario where login ='" + login + "'");
-
-		PreparedStatement statement = connection.prepareStatement(sql);
-		ResultSet resultSet = statement.executeQuery();
-
-		if (resultSet.next()) {
-
-			return resultSet.getInt("qtd") <= 0; // Return true
-		}
-		return false;
-	}
-
-	public Boolean validarLoginUpdate(String login, String codUsuario) throws Exception {
-
-		String sql = ("select count(1) as qtd from usuario where login ='" + login + "' and codUsuario <> "
-				+ codUsuario);
-
-		PreparedStatement statement = connection.prepareStatement(sql);
-		ResultSet resultSet = statement.executeQuery();
-
-		if (resultSet.next()) {
-
-			return resultSet.getInt("qtd") <= 0; // Return true
-		}
-		return false;
-	}
-
 	public void atualizar(BeanUsuario usuario) {
-
-		String sql = "update usuario set nome = ?, login = ?, senha = ?, tipo_usuario = ?";
+		String sql = "update usuario set nome = ?, login = ?, senha = ?, tipo_usuario = ? where codUsuario = " + usuario.getCodUsuario();
 
 		try {
-			PreparedStatement statement = connection.prepareStatement(sql.toString());
+			PreparedStatement statement = connection.prepareStatement(sql);
+
 			statement.setString(1, usuario.getNome());
 			statement.setString(2, usuario.getLogin());
 			statement.setString(3, usuario.getSenha());
-			statement.setLong(4, usuario.getTipo_usuario());
+			statement.setLong(4, usuario.getTipo_usuario().getCodTipo());
 
 			statement.executeUpdate();
 
 			connection.commit();
 
-		} catch (Exception e) {
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+			try {
+				connection.rollback();
+
+			} catch (SQLException e1) {
+
+				e1.printStackTrace();
+			}
+		}
+
+	}
+
+	public void delete(String codUsuario) {
+		try {
+			String sql = "delete from usuario where codUsuario = '" + codUsuario + "'";
+
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.execute();
+			connection.commit();
+
+		} catch (SQLException e) {
 			e.printStackTrace();
 
 			try {
@@ -180,7 +169,8 @@ public class DaoUsuario {
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-		}
-	}
 
+		}
+
+	}
 }
