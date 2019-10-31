@@ -1,8 +1,8 @@
-<%@page import="beans.BeanUsuario"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <!DOCTYPE html>
 <html>
@@ -10,12 +10,9 @@
 
 <meta charset="ISO-8859-1">
 <title>Cadastro de Usuário</title>
+<script src="resources/javascript/jquery.min.js" type="text/javascript"></script>
+
 <link rel="stylesheet" href="resources/css/cadastro.css">
-
-
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"
-	integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-	crossorigin="anonymous"></script>
 
 </head>
 
@@ -25,51 +22,51 @@
 	<a href="index.jsp"><img alt="Sair" title="Sair"
 		src="resources/img/sair.png" height="48px" width="48px"></a>
 	<center>
-		<h1>Cadastro de usuário</h1>
+		<h1>Cadastro de Usuário</h1>
 		<h3 style="color: red;">${msg}</h3>
 	</center>
 
 	<form action="salvarUsuario" method="post" id="formUser"
-		onsubmit="return validarCampos() ? true : false;"
-		enctype="multipart/form-data">
+		onsubmit="return validarCampos() ? true : false;">
 		<ul class="form-style-1">
 			<li>
 				<table>
 					<tr>
 						<td>Código:</td>
-						<td><input type="text" readonly="readonly" id="id" name="id"
-							value="${user.id}" style="width: 193px;" class="field-long"></td>
+						<td><input type="text" readonly="readonly" id="codUsuario" name="codUsuario"
+							value="${usuario.codUsuario}" class="field-long"></td>
 					</tr>
-					
 					<tr>
 						<td>Nome:</td>
-						<td><input type="text" id="nome" name="nome" maxlength="50"
-							placeholder="Informe o nome do usuário" value="${user.nome}"></td>
+						<td><input type="text" id="nome" name="nome"
+							placeholder="Informe o nome" maxlength="90"
+							value="${usuario.nome}"></td>
 					</tr>
-					
+
 					<tr>
 						<td>Login:</td>
-						<td><input type="text" id="login" name="login" maxlength="10"
-							placeholder="Informe um login" value="${user.login}"></td>
+						<td><input type="text" id="login" name="login"
+							placeholder="Informe o login" maxlength="15"
+							value="${usuario.login}"></td>
 					</tr>
 
 					<tr>
 						<td>Senha:</td>
 						<td><input type="password" id="senha" name="senha"
-							maxlength="10" placeholder="Informe uma senha"
-							value="${user.senha}"></td>
+							placeholder="Informe uma senha" value="${usuario.senha}"
+							maxlength="10"></td>
 					</tr>
-
+					
 					<tr>
 						<td>Cargo:</td>
 						<td>
-							<select id="tipo_usuario" name="tipo_usuario">
-								<c:forEach items="${tipo_usuarios}" var="tipo">
-									<option value="${tipo.codTipo}" id="${tipo.codTipo}"
-										<c:if test="${tipo.codTipo == produto.tipo_usuario}">
+							<select id="cargos" name="tipo_usuario">
+								<c:forEach items="${cargos}" var="cat">
+									<option value="${cat.codTipo}" id="${cat.codTipo}"
+										<c:if test="${cat.codTipo == usuario.tipo_usuario}">
 										<c:out value="selected=selected" />
 										</c:if>>
-									${tipo.descricao}
+									${cat.descricao}
 									</option>
 								</c:forEach>
 							
@@ -79,8 +76,8 @@
 
 					<tr>
 						<td></td>
-						<td><input type="submit" value="Salvar"> <input
-							type="submit" value="Cancelar"
+						<td><input type="submit" value="Salvar" style="width: 95px;">
+							<input type="submit" value="Cancelar" style="width: 95px;"
 							onclick="document.getElementById('formUser').action ='salvarUsuario?acao=reset'"></td>
 					</tr>
 				</table>
@@ -88,59 +85,40 @@
 			</li>
 		</ul>
 	</form>
-	
-	<form method="post" action="servletPesquisa" style="width: 90%">
-	<ul class="form-style-1">
-			<li>
-				<table>
-					<tr>
-						<td>Descrição </td>
-						<td><input type="text" id="descricaoConsulta" name="descricaoConsulta"> </td>
-						<td><input type="submit" value="Pesquisar"> </td>
-					</tr>
-
-				</table> 
-			</li> 
-	</ul>
-	</form>				
-
 
 	<div class="container">
 		<table class="responsive-table">
-			<caption>Lista de Usuários</caption>
+			<caption>Lista de Usuario</caption>
 			<tr>
-				<th>Id</th>
+				<th>Código</th>
 				<th>Nome</th>
-				<th>login</th>
-				<th>Senha</th>
+				<th>Login</th>
 				<th>Cargo</th>
-				<th>Delete</th>
-				<th>Editar</th>
-
+				<th>Deletar</th>
+				<th>Atualizar</th>
 			</tr>
-			<c:forEach items="${usuarios}" var="user">
+			<c:forEach items="${usuarios}" var="usuario">
 				<tr>
-					<td style="width: 150px"><c:out value="${user.codUsuario}"></c:out></td>
-					<td><c:out value="${user.nome}"></c:out></td>
+					<td style="width: 150px"><c:out value="${usuario.codUsuario}">
+						</c:out></td>
 
-					<td style="width: 150px"><c:out value="${user.codUsuario}"></c:out></td>
-					<td><c:out value="${user.login}"></c:out></td>
-					
-					<td style="width: 150px"><c:out value="${user.codUsuario}"></c:out></td>
-					<td><c:out value="${user.senha}"></c:out></td>
-					
-					<td style="width: 150px"><c:out value="${user.codUsuario}"></c:out></td>
-					<td><c:out value="${user.tipo_usuario}"></c:out></td>
+					<td style="width: 150px"><c:out value="${usuario.nome}">
+						</c:out></td>
 
-					<td><a href="salvarUsuario?acao=delete&user=${user.codUsuario}"
+					<td><c:out value="${usuario.login}"></c:out></td>
+
+					<td><c:out value="${usuario.tipo_usuario}"></c:out></td>
+
+					<td><a
+						href="salvarUsuario?acao=delete&usuario=${usuario.codUsuario}"
 						onclick="return confirm('Confirmar a exclusão?');"><img
 							src="resources/img/excluir.png" alt="excluir" title="Excluir"
 							width="20px" height="20px"> </a></td>
 
-					<td><a href="salvarUsuario?acao=editar&user=${user.codUsuario}"><img
+					<td><a
+						href="salvarUsuario?acao=editar&usuario=${usuario.codUsuario}"><img
 							alt="Editar" title="Editar" src="resources/img/editar.png"
 							width="20px" height="20px"></a></td>
-
 				</tr>
 			</c:forEach>
 		</table>
@@ -148,7 +126,7 @@
 
 	<script type="text/javascript">
 		function validarCampos() {
-			
+
 			if (document.getElementById("nome").value == '') {
 				alert('Informe o nome');
 				return false;
@@ -158,12 +136,10 @@
 			} else if (document.getElementById("senha").value == '') {
 				alert('Informe a senha');
 				return false;
-			} else if (document.getElementById("tipo_usuario").value == '') {
-				alert('Informe o cargo');
-				return false;
 			}
-
+			
 			return true;
+
 		}
 	</script>
 
