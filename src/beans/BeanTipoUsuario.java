@@ -37,4 +37,11 @@ public class BeanTipoUsuario {
 		this.setor = setor;
 	}
 
+	@Override
+	public String toString() {
+		return " " + descricao + "";
+	}
+	
+	
+
 }
