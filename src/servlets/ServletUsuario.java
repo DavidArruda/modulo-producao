@@ -68,7 +68,8 @@ public class ServletUsuario extends HttpServlet {
 
 			try {
 				RequestDispatcher view = request.getRequestDispatcher("/cadastroUsuario.jsp");
-				// request.setAttribute("produtos", daoProduto.listar());
+				 request.setAttribute("usuarios", daoUsuario.listar());
+				 request.setAttribute("cargos", daoUsuario.listaTipoUsuario());
 				view.forward(request, response);
 
 			} catch (Exception e) {
@@ -92,7 +93,7 @@ public class ServletUsuario extends HttpServlet {
 			usuario.getTipo_usuario().setCodTipo(Long.parseLong(tipo_usuario));
 
 			try {
-				// VALIDA SE OS CAMPOS EST�O PREENCHIDOS
+				// VALIDA SE OS CAMPOS ESTÃO PREENCHIDOS
 				if (nome == null || nome.isEmpty()) {
 					request.setAttribute("msg", "Campo Nome está vazio");
 					request.setAttribute("usuario", usuario);
@@ -112,7 +113,7 @@ public class ServletUsuario extends HttpServlet {
 					daoUsuario.atualizar(usuario);
 				}
 
-				// REDIRECIONA A P�GINA E LISTA OS PRODUTOS NOVAMENTE
+				// REDIRECIONA A PÁGINA E LISTA OS PRODUTOS NOVAMENTE
 				RequestDispatcher view = request.getRequestDispatcher("/cadastroUsuario.jsp");
 				request.setAttribute("usuarios", daoUsuario.listar());
 				request.setAttribute("cargos", daoUsuario.listaTipoUsuario());
