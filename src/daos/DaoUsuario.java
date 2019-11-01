@@ -87,8 +87,6 @@ public class DaoUsuario {
 		while (resultSet.next()) {
 
 			BeanUsuario usuario = new BeanUsuario();
-			BeanTipoUsuario tpUsuario = new BeanTipoUsuario();
-			
 			usuario.setCodUsuario(resultSet.getLong("codUsuario"));
 			usuario.setNome(resultSet.getString("nome"));
 			usuario.setLogin(resultSet.getString("login"));

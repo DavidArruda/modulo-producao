@@ -12,6 +12,15 @@ public class BeanFichaPreparacao {
 	private Long codFicha;
 	private String fBase64;
 	private String fContentType;
+	private boolean atualizar = true;
+	
+	public boolean isAtualizar() {
+		return atualizar;
+	}
+	
+	public void setAtualizar(boolean atualizar) {
+		this.atualizar = atualizar;
+	}
 
 	public Long getCodFicha() {
 		return codFicha;

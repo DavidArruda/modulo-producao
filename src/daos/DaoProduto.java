@@ -139,38 +139,4 @@ public class DaoProduto {
 
 	}
 
-	/*
-	 * 
-	 * 
-	 * public Boolean validarNome(String nome) throws SQLException {
-	 * 
-	 * String sql = ("select count(1) as qtd from produtos where nome = '" + nome +
-	 * "'");
-	 * 
-	 * PreparedStatement statement = connection.prepareStatement(sql); ResultSet
-	 * resultSet = statement.executeQuery();
-	 * 
-	 * if (resultSet.next()) { return resultSet.getInt("qtd") <= 0; // Return true
-	 * 
-	 * }
-	 * 
-	 * return false; }
-	 * 
-	 * public BeanProduto consultar(String id) throws Exception {
-	 * 
-	 * String sql = ("select * from produtos where id ='" + id + "'");
-	 * 
-	 * PreparedStatement statement = connection.prepareStatement(sql); ResultSet
-	 * resultSet = statement.executeQuery();
-	 * 
-	 * if (resultSet.next()) { BeanProduto produto = new BeanProduto();
-	 * produto.setId(resultSet.getLong("id"));
-	 * produto.setNome(resultSet.getString("nome"));
-	 * produto.setQuantidade(resultSet.getDouble("quantidade"));
-	 * produto.setValor(resultSet.getDouble("valor"));
-	 * produto.setCategoria_id(resultSet.getLong("categoria_id"));
-	 * 
-	 * return produto; } return null; }
-	 * 
-	 */
 }
