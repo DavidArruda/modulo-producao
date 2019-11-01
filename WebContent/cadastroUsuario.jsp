@@ -63,7 +63,7 @@
 							<select id="cargos" name="tipo_usuario">
 								<c:forEach items="${cargos}" var="cat">
 									<option value="${cat.codTipo}" id="${cat.codTipo}"
-										<c:if test="${cat.codTipo == usuario.tipo_usuario}">
+										<c:if test="${cat.codTipo == usuario.tipo_usuario.codTipo}">
 										<c:out value="selected=selected" />
 										</c:if>>
 									${cat.descricao}
