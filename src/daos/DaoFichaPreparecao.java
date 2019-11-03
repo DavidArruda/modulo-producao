@@ -81,7 +81,7 @@ public class DaoFichaPreparecao {
 
 		if (resultSet.next()) {
 			BeanFichaPreparacao fichaPreparacao = new BeanFichaPreparacao();
-			fichaPreparacao.setCodFicha(resultSet.getLong("codProduto"));
+			fichaPreparacao.setCodFicha(resultSet.getLong("codFicha"));
 			fichaPreparacao.setfBase64(resultSet.getString("fBase64"));
 			fichaPreparacao.setfContentType(resultSet.getString("fContentType"));
 
