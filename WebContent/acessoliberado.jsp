@@ -16,11 +16,13 @@
 		 <tr>
 		 	<td><a href="salvarUsuario?acao=listartodos"> <img alt="Cadastrar Usuário" title="Cadastrar Usuários" src="resources/img/usuario.png" width="100px" height="100px" ></a> </td>
 		 	<td><a href="salvarProduto?acao=listartodos"> <img alt="Cadastrar Produto" title="Cadastrar Produto" src="resources/img/produtoImg.png" width="100px" height="100px" ></a> </td>
+		 	<td><a href="salvarFicha?acao=listartodos"> <img alt="Cadastrar Ficha Preparação" title="Cadastrar Ficha" src="resources/img/produtoImg.png" width="100px" height="100px" ></a> </td>
 		  </tr>
 		  
 		  <tr>
 		  	<td>Cad. Usuário</td>
 		  	<td>Cad. Produto</td>
+		  	<td>Cad. Ficha</td>
 		  </tr>
 	
 	</table>
