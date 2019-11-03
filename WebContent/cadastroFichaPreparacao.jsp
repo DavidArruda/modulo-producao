@@ -61,6 +61,8 @@
 			<tr>
 				<th>Código</th>
 				<th>Ficha</th>
+				<th>Excluir</th>
+				<th>Atualizar</th>
 			</tr>
 			
 			<c:forEach items="${fichas}" var="fichaPreparacao">
@@ -80,6 +82,17 @@
 							width="32px" height="32px"
 							onclick="alert('Não possui curriculo')"></td>
 					</c:if>
+					
+					<td><a
+						href="salvarFicha?acao=delete&fichaPreparacao=${fichaPreparacao.codFicha}"
+						onclick="return confirm('Confirmar a exclusão?');"><img
+							src="resources/img/excluir.png" alt="excluir" title="Excluir"
+							width="20px" height="20px"> </a></td>
+
+					<td><a
+						href="salvarFicha?acao=editar&fichaPreparacao=${fichaPreparacao.codFicha}"><img
+							alt="Editar" title="Editar" src="resources/img/editar.png"
+							width="20px" height="20px"></a></td>
 					
 				</tr>
 			</c:forEach>
