@@ -8,6 +8,7 @@ import java.io.OutputStream;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +20,7 @@ import org.apache.tomcat.util.codec.binary.Base64;
 import beans.BeanFichaPreparacao;
 import daos.DaoFichaPreparecao;
 
+@MultipartConfig
 @WebServlet("/salvarFicha")
 public class ServletFichaPreparacao extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -30,6 +32,7 @@ public class ServletFichaPreparacao extends HttpServlet {
 
 	}
 
+	@SuppressWarnings("static-access")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -43,13 +46,16 @@ public class ServletFichaPreparacao extends HttpServlet {
 			if (acao.equalsIgnoreCase("delete")) {
 				daoFichaPreparacao.delete(fichaPreparacao);
 				request.setAttribute("fichas", daoFichaPreparacao.listar());
+				view.forward(request, response);
 
 			} else if (acao.equalsIgnoreCase("editar")) {
 				BeanFichaPreparacao beanFicha = daoFichaPreparacao.consultar(fichaPreparacao);
 				request.setAttribute("fichaPreparacao", beanFicha);
+				view.forward(request, response);
 
 			} else if (acao.equalsIgnoreCase("listartodos")) {
 				request.setAttribute("fichas", daoFichaPreparacao.listar());
+				view.forward(request, response);
 
 			} else if (acao != null && acao.equalsIgnoreCase("download")) {
 
@@ -66,7 +72,7 @@ public class ServletFichaPreparacao extends HttpServlet {
 					response.setHeader("Content-Disposition",
 							"attachment;filename=arquivo." + contentType.split("\\/")[1]);
 
-					// Coloca os bytes em objeto de entrada para processar
+					// Coloca os bytes em um objeto de entrada para processar
 					InputStream is = new ByteArrayInputStream(fileBytes);
 
 					// resposta ao navegador
@@ -81,9 +87,12 @@ public class ServletFichaPreparacao extends HttpServlet {
 					os.flush();
 					os.close();
 				}
+
+			} else {
+				request.setAttribute("fichas", daoFichaPreparacao.listar());
+				view.forward(request, response);
+
 			}
-			
-			view.forward(request, response);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -111,12 +120,19 @@ public class ServletFichaPreparacao extends HttpServlet {
 
 			try {
 
-				BeanFichaPreparacao ficha = new BeanFichaPreparacao();
+				// Processa ficha
 
-				// Processa curriculo
+				String codFicha = request.getParameter("codFicha");
+
+				RequestDispatcher view = request.getRequestDispatcher("/cadastroFichaPreparacao.jsp");
+
+				BeanFichaPreparacao ficha = new BeanFichaPreparacao();
+				ficha.setCodFicha(!codFicha.isEmpty() ? Long.parseLong(codFicha) : null);
+
 				Part fichaPreparacao = request.getPart("fichaPreparacao");
 
 				if (fichaPreparacao != null && fichaPreparacao.getInputStream().available() > 0) {
+					@SuppressWarnings("static-access")
 					String fBase64 = new Base64()
 							.encodeBase64String(convertStreamParByte(fichaPreparacao.getInputStream()));
 
@@ -126,6 +142,16 @@ public class ServletFichaPreparacao extends HttpServlet {
 				} else {
 					ficha.setAtualizar(false);
 				}
+
+				if (codFicha == null || codFicha.isEmpty()) { // SALVA NOVO USUARIO
+					daoFichaPreparacao.salvar(ficha);
+
+				} else {
+					daoFichaPreparacao.atualizar(ficha);
+				}
+
+				request.setAttribute("fichas", daoFichaPreparacao.listar());
+				view.forward(request, response);
 
 			} catch (Exception e) {
 
