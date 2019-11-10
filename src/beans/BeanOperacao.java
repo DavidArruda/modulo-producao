@@ -11,7 +11,7 @@ public class BeanOperacao {
 
 	private Long codOperacao;
 	private Integer nOperacao;
-	private BeanProduto produto;
+	private BeanProduto produto = new BeanProduto();
 
 	public Long getCodOperacao() {
 		return codOperacao;
