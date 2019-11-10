@@ -3,6 +3,7 @@
  */
 package daos;
 
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,8 +13,6 @@ import java.util.List;
 
 import beans.BeanOperacao;
 import beans.BeanProduto;
-import beans.BeanTipoUsuario;
-import beans.BeanUsuario;
 import connection.SingleConnection;
 
 /**
