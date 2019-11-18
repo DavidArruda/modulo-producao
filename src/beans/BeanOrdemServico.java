@@ -16,7 +16,7 @@ public class BeanOrdemServico {
 	private Date dataEntrega;
 	private Integer quantidade;
 	private String status;
-	private Long produto;
+	private BeanProduto produto;
 
 	public Long getCodOs() {
 		return codOs;
@@ -58,11 +58,11 @@ public class BeanOrdemServico {
 		this.status = status;
 	}
 
-	public Long getProduto() {
+	public BeanProduto getProduto() {
 		return produto;
 	}
 
-	public void setProduto(Long produto) {
+	public void setProduto(BeanProduto produto) {
 		this.produto = produto;
 	}
 
