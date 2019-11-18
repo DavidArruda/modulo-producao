@@ -79,6 +79,9 @@
 				<th>Código</th>
 				<th>Nº Operação</th>
 				<th>Produto</th>
+				<th>Ficha de Preparação</th>
+				<th>Deletar</th>
+				<th>Atualizar</th>
 			</tr>
 
 			<c:forEach items="${operacoes}" var="operacao">
@@ -91,9 +94,13 @@
 						</c:out></td>
 
 					<td><c:out value="${operacao.produto}"></c:out></td>
+					
+					<td><a href="salvarFicha?acao=addFicha&operacao=${operacao.codOperacao}"><img
+							alt="Telefone" title="Telefones" src="resources/img/phone.png"
+							width="20px" height="20px"></a></td>
 
 					<td><a
-						href="salvarOperacao?acao=delete&produto=${operacao.codOperacao}"
+						href="salvarOperacao?acao=delete&operacao=${operacao.codOperacao}"
 						onclick="return confirm('Confirmar a exclusão?');"><img
 							src="resources/img/excluir.png" alt="excluir" title="Excluir"
 							width="20px" height="20px"> </a></td>

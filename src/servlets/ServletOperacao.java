@@ -105,7 +105,8 @@ public class ServletOperacao extends HttpServlet {
 				}
 
 				// REDIRECIONA A P�GINA E LISTA OS PRODUTOS NOVAMENTE
-				RequestDispatcher view = request.getRequestDispatcher("/cadastroOperacoes.jsp");
+				RequestDispatcher view = request.getRequestDispatcher("/cadastroOperacao.jsp");
+				request.setAttribute("produtos", daoProduto.listar());
 				request.setAttribute("operacoes", daoOperacao.listar());
 				view.forward(request, response);
 

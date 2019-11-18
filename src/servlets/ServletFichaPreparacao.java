@@ -18,7 +18,9 @@ import javax.servlet.http.Part;
 import org.apache.tomcat.util.codec.binary.Base64;
 
 import beans.BeanFichaPreparacao;
+import beans.BeanOperacao;
 import daos.DaoFichaPreparecao;
+import daos.DaoOperacao;
 
 @MultipartConfig
 @WebServlet("/salvarFicha")
@@ -26,6 +28,7 @@ public class ServletFichaPreparacao extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private DaoFichaPreparecao daoFichaPreparacao = new DaoFichaPreparecao();
+	private DaoOperacao daoOperacao = new DaoOperacao();
 
 	public ServletFichaPreparacao() {
 		super();
@@ -39,53 +42,63 @@ public class ServletFichaPreparacao extends HttpServlet {
 		try {
 
 			String acao = request.getParameter("acao");
+			String op = request.getParameter("operacao");
 			String fichaPreparacao = request.getParameter("fichaPreparacao");
 
 			RequestDispatcher view = request.getRequestDispatcher("/cadastroFichaPreparacao.jsp");
 
-			if (acao.equalsIgnoreCase("delete")) {
-				daoFichaPreparacao.delete(fichaPreparacao);
-				request.setAttribute("fichas", daoFichaPreparacao.listar());
-				view.forward(request, response);
+			if (op != null) {
+				BeanOperacao operacao = daoOperacao.consultar(op);
 
-			} else if (acao.equalsIgnoreCase("editar")) {
-				BeanFichaPreparacao beanFicha = daoFichaPreparacao.consultar(fichaPreparacao);
-				request.setAttribute("fichaPreparacao", beanFicha);
-				view.forward(request, response);
+				if (acao.equalsIgnoreCase("addFicha")) {
 
-			} else if (acao.equalsIgnoreCase("listartodos")) {
-				request.setAttribute("fichas", daoFichaPreparacao.listar());
-				view.forward(request, response);
+					request.getSession().setAttribute("fichaEscolhida", operacao);
+					request.setAttribute("fichaEscolhida", operacao);
+					request.setAttribute("fichas", daoFichaPreparacao.listar());
+					view.forward(request, response);
 
-			} else if (acao != null && acao.equalsIgnoreCase("download")) {
+				} else if (acao.equalsIgnoreCase("delete")) {
+					String codFicha = request.getParameter("codFicha");
 
-				BeanFichaPreparacao ficha = daoFichaPreparacao.consultar(fichaPreparacao);
+					daoFichaPreparacao.delete(codFicha);
 
-				if (ficha != null) {
+					//BeanOperacao beanOperacao = (BeanOperacao) request.getSession().getAttribute("fichaEscolhida");
 
-					String contentType = "";
-					byte[] fileBytes = null;
+					request.setAttribute("fichas", daoFichaPreparacao.listar());
+					request.setAttribute("msg", "Removido");
+					view.forward(request, response);
 
-					contentType = ficha.getfContentType();
-					fileBytes = new Base64().decodeBase64(ficha.getfBase64()); // converte a base64 do pdf para byte[]
+				} else if (acao != null && acao.equalsIgnoreCase("download")) {
 
-					response.setHeader("Content-Disposition",
-							"attachment;filename=arquivo." + contentType.split("\\/")[1]);
+					BeanFichaPreparacao ficha = daoFichaPreparacao.consultar(fichaPreparacao);
 
-					// Coloca os bytes em um objeto de entrada para processar
-					InputStream is = new ByteArrayInputStream(fileBytes);
+					if (ficha != null) {
 
-					// resposta ao navegador
-					int read = 0;
-					byte[] bytes = new byte[1024];
-					OutputStream os = response.getOutputStream();
+						String contentType = "";
+						byte[] fileBytes = null;
 
-					while ((read = is.read(bytes)) != -1) {
-						os.write(bytes, 0, read);
+						contentType = ficha.getfContentType();
+						fileBytes = new Base64().decodeBase64(ficha.getfBase64()); // converte a base64 do pdf para
+																					// byte[]
+
+						response.setHeader("Content-Disposition",
+								"attachment;filename=arquivo." + contentType.split("\\/")[1]);
+
+						// Coloca os bytes em um objeto de entrada para processar
+						InputStream is = new ByteArrayInputStream(fileBytes);
+
+						// resposta ao navegador
+						int read = 0;
+						byte[] bytes = new byte[1024];
+						OutputStream os = response.getOutputStream();
+
+						while ((read = is.read(bytes)) != -1) {
+							os.write(bytes, 0, read);
+						}
+
+						os.flush();
+						os.close();
 					}
-
-					os.flush();
-					os.close();
 				}
 
 			} else {
