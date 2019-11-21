@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import beans.BeanOrdemServico;
 import daos.DaoOrdemServico;
 
-@WebServlet("/ServletOrdemServico")
+@WebServlet("/salvarOrdemServico")
 public class ServletOrdemServico extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -46,6 +46,8 @@ public class ServletOrdemServico extends HttpServlet {
 
 			} else if (acao.equalsIgnoreCase("listartodos")) {
 				// request.setAttribute("ordens", daoOrdemServico.listar());
+				request.setAttribute("produtos", daoOrdemServico.listaProdutos());
+				
 			}
 
 			// request.setAttribute("produtos", daoOrdemServico.listaProdutos());
@@ -85,10 +87,8 @@ public class ServletOrdemServico extends HttpServlet {
 
 			try {
 
-				SimpleDateFormat form = new SimpleDateFormat("dd/MM/yyyy");
-
-				Date dFormatadaEmissao = form.parse(dateEmissao);
-				Date dFormatadaEntrega = form.parse(dataEntrega);
+				Date dFormatadaEmissao = new SimpleDateFormat("dd/MM/yyyy").parse(dateEmissao);
+				Date dFormatadaEntrega = new SimpleDateFormat("dd/MM/yyyy").parse(dataEntrega);
 
 				beanOrdemServico.setCodOs(!codOs.isEmpty() ? Long.parseLong(codOs) : null);
 				beanOrdemServico.setDateEmissao(dFormatadaEmissao);

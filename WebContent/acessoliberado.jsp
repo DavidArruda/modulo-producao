@@ -18,6 +18,7 @@
 		 	<td><a href="salvarProduto?acao=listartodos"> <img alt="Cadastrar Produto" title="Cadastrar Produto" src="resources/img/produtoImg.png" width="100px" height="100px" ></a> </td>
 		 	<td><a href="salvarFicha?acao=listartodos"> <img alt="Cadastrar Ficha Preparação" title="Cadastrar Ficha" src="resources/img/produtoImg.png" width="100px" height="100px" ></a> </td>
 		 	<td><a href="salvarOperacao?acao=listartodos"> <img alt="Processo" title="Cadastrar Processos " src="resources/img/produtoImg.png" width="100px" height="100px" ></a> </td>
+		 	<td><a href="salvarOrdemServico?acao=listartodos"> <img alt="OD" title="Cadastrar OS " src="resources/img/produtoImg.png" width="100px" height="100px" ></a> </td>
 		  </tr>
 		  
 		  <tr>

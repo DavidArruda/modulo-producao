@@ -16,7 +16,7 @@ public class BeanOrdemServico {
 	private Date dataEntrega;
 	private Integer quantidade;
 	private String status;
-	private BeanProduto produto;
+	private BeanProduto produto = new BeanProduto();
 
 	public Long getCodOs() {
 		return codOs;

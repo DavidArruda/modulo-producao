@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -38,10 +37,10 @@ public class DaoOrdemServico {
 			PreparedStatement statement = connection.prepareStatement(sql);
 	
 			statement.setDate(1, new java.sql.Date (os.getDateEmissao().getTime()));
-			//statement.setDate(2, dataEntrega);
+			statement.setDate(2, new java.sql.Date(os.getDataEntrega().getTime()));
 			statement.setInt(3, os.getQuantidade());
-			statement.setString(1, os.getStatus());
-			//statement.setLong(4, produto.getCodProduto());
+			statement.setString(4, os.getStatus());
+			statement.setLong(5, os.getProduto().getCodProduto());
 
 			statement.execute();
 			connection.commit();
@@ -57,30 +56,30 @@ public class DaoOrdemServico {
 			}
 		}
 	}
-/*
-	public List<BeanTipoUsuario> listaTipoUsuario() throws Exception {
-		List<BeanTipoUsuario> retorno = new ArrayList<BeanTipoUsuario>();
 
-		String sql = "select * from tipo_usuario";
+	public List<BeanProduto> listaProdutos() throws Exception {
+		List<BeanProduto> retorno = new ArrayList<BeanProduto>();
+
+		String sql = "select * from produto";
 		
 		PreparedStatement statement = connection.prepareStatement(sql);
 
 		ResultSet resultSet = statement.executeQuery();
 
 		while (resultSet.next()) {
-			BeanTipoUsuario categoria = new BeanTipoUsuario();
-			categoria.setCodTipo(resultSet.getLong("codTipo"));
-			categoria.setDescricao(resultSet.getString("descricao"));
-			categoria.setSetor(resultSet.getString("setor"));
+			BeanProduto produto = new BeanProduto();
+			produto.setCodProduto(resultSet.getLong("codProduto"));
+			produto.setPn(resultSet.getString("pn"));
+			produto.setDescricao(resultSet.getString("descricao"));
 
-			retorno.add(categoria);
+			retorno.add(produto);
 		}
 
 		return retorno;
 
 	}
 	
-	
+	/*	
 	public List<BeanUsuario> listar() throws Exception {
 		List<BeanUsuario> lista = new ArrayList<BeanUsuario>();
 
