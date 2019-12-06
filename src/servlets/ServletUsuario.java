@@ -107,7 +107,7 @@ public class ServletUsuario extends HttpServlet {
 					request.setAttribute("usuario", usuario);
 
 				} else if (codUsuario == null || codUsuario.isEmpty()) { // VERIFICA ID E SALVA PRODUTO
-					daoUsuario.salvar(usuario);
+					daoUsuario.pSalvar(usuario);
 
 				} else { // ATUALIZA REGISTRO
 					daoUsuario.atualizar(usuario);

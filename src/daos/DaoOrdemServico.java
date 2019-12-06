@@ -7,9 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import beans.BeanOrdemServico;
@@ -30,13 +28,13 @@ public class DaoOrdemServico {
 
 	public void salvar(BeanOrdemServico os) {
 
-		String sql = "insert into ordem_servico(dateEmissao, dataEntrega, quantidade, status, produto) values(?, ?, ?, ?, ?)";
+		String sql = "insert into ordem_servico (dateEmissao, dataEntrega, quantidade, status, produto) values(?, ?, ?, ?, ?)";
 
 		try {
-			
+
 			PreparedStatement statement = connection.prepareStatement(sql);
-	
-			statement.setDate(1, new java.sql.Date (os.getDateEmissao().getTime()));
+
+			statement.setDate(1, new java.sql.Date(os.getDateEmissao().getTime()));
 			statement.setDate(2, new java.sql.Date(os.getDataEntrega().getTime()));
 			statement.setInt(3, os.getQuantidade());
 			statement.setString(4, os.getStatus());
@@ -60,8 +58,8 @@ public class DaoOrdemServico {
 	public List<BeanProduto> listaProdutos() throws Exception {
 		List<BeanProduto> retorno = new ArrayList<BeanProduto>();
 
-		String sql = "select * from produto";
-		
+		String sql = "select codProduto, pn from produto";
+
 		PreparedStatement statement = connection.prepareStatement(sql);
 
 		ResultSet resultSet = statement.executeQuery();
@@ -70,7 +68,6 @@ public class DaoOrdemServico {
 			BeanProduto produto = new BeanProduto();
 			produto.setCodProduto(resultSet.getLong("codProduto"));
 			produto.setPn(resultSet.getString("pn"));
-			produto.setDescricao(resultSet.getString("descricao"));
 
 			retorno.add(produto);
 		}
@@ -78,63 +75,67 @@ public class DaoOrdemServico {
 		return retorno;
 
 	}
-	
-	/*	
-	public List<BeanUsuario> listar() throws Exception {
-		List<BeanUsuario> lista = new ArrayList<BeanUsuario>();
 
-		String sql = "select us.codUsuario, us.nome, us.login, us.senha, tp.descricao\n" + 
-				"	from usuario us left outer join tipo_usuario tp on us.tipo_usuario = tp.codTipo;";
+	public List<BeanOrdemServico> listar() throws Exception {
+		List<BeanOrdemServico> lista = new ArrayList<BeanOrdemServico>();
+
+		String sql = "select os.codOs, os.dateEmissao, os.dataEntrega, os.quantidade, os.status, pr.pn"
+				+ " from ordem_servico os left outer join produto pr on os.produto = pr.codProduto;";
 
 		PreparedStatement statement = connection.prepareStatement(sql);
 		ResultSet resultSet = statement.executeQuery();
 
 		while (resultSet.next()) {
 
-			BeanUsuario usuario = new BeanUsuario();
-			usuario.setCodUsuario(resultSet.getLong("codUsuario"));
-			usuario.setNome(resultSet.getString("nome"));
-			usuario.setLogin(resultSet.getString("login"));
-			usuario.setSenha(resultSet.getString("senha"));
-			usuario.getTipo_usuario().setDescricao(resultSet.getString("descricao"));
+			BeanOrdemServico os = new BeanOrdemServico();
+			os.setCodOs(resultSet.getLong("codOs"));
+			os.setDateEmissao(resultSet.getDate("dateEmissao"));
+			os.setDataEntrega(resultSet.getDate("dataEntrega"));
+			os.setQuantidade(resultSet.getInt("quantidade"));
+			os.setStatus(resultSet.getString("status"));
+			os.getProduto().setPn(resultSet.getString("pn"));
 
-			lista.add(usuario);
+			lista.add(os);
 
 		}
 
 		return lista;
 	}
 
-	public BeanUsuario consultar(String codUsuario) throws Exception { //consulta para atualização
+	public BeanOrdemServico consultar(String codOs) throws Exception { // consulta para atualização
 
-		String sql = ("select * from usuario where codUsuario ='" + codUsuario + "'");
+		String sql = ("select * from ordem_servico where codOs ='" + codOs + "'");
 
 		PreparedStatement statement = connection.prepareStatement(sql);
 		ResultSet resultSet = statement.executeQuery();
 
 		if (resultSet.next()) {
-			BeanUsuario usuario = new BeanUsuario();
-			usuario.setCodUsuario(resultSet.getLong("codUsuario"));
-			usuario.setNome(resultSet.getString("nome"));
-			usuario.setLogin(resultSet.getString("login"));
-			usuario.setSenha(resultSet.getString("senha"));
-			usuario.getTipo_usuario().setCodTipo(resultSet.getLong("tipo_usuario"));
 
-			return usuario;
+			BeanOrdemServico os = new BeanOrdemServico();
+			os.setCodOs(resultSet.getLong("codOs"));
+			os.setDateEmissao(resultSet.getDate("dateEmissao"));
+			os.setDataEntrega(resultSet.getDate("dataEntrega"));
+			os.setQuantidade(resultSet.getInt("quantidade"));
+			os.setStatus(resultSet.getString("status"));
+			os.getProduto().setCodProduto(resultSet.getLong("produto"));
+
+			return os;
 		}
 		return null;
 	}
 
-	public void atualizar(BeanUsuario usuario) {
-		String sql = "update usuario set nome = ?, login = ?, senha = ?, tipo_usuario = ? where codUsuario = " + usuario.getCodUsuario();
+	public void atualizar(BeanOrdemServico os) {
+		String sql = "update ordem_servico set dateEmissao = ?, dataEntrega = ?, quantidade = ?, status = ?, produto = ? where codOs = "
+				+ os.getCodOs();
 
 		try {
 			PreparedStatement statement = connection.prepareStatement(sql);
 
-			statement.setString(1, usuario.getNome());
-			statement.setString(2, usuario.getLogin());
-			statement.setString(3, usuario.getSenha());
-			statement.setLong(4, usuario.getTipo_usuario().getCodTipo());
+			statement.setDate(1, new java.sql.Date(os.getDateEmissao().getTime()));
+			statement.setDate(2, new java.sql.Date(os.getDateEmissao().getTime()));
+			statement.setInt(3, os.getQuantidade());
+			statement.setString(4, os.getStatus());
+			statement.setLong(5, os.getProduto().getCodProduto());
 
 			statement.executeUpdate();
 
@@ -155,9 +156,9 @@ public class DaoOrdemServico {
 
 	}
 
-	public void delete(String codUsuario) {
+	public void delete(String codOs) {
 		try {
-			String sql = "delete from usuario where codUsuario = '" + codUsuario + "'";
+			String sql = "delete from ordem_servico where codUsuario = '" + codOs + "'";
 
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.execute();
@@ -176,5 +177,5 @@ public class DaoOrdemServico {
 		}
 
 	}
-	*/
+
 }

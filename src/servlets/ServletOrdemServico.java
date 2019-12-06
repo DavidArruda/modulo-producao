@@ -32,25 +32,24 @@ public class ServletOrdemServico extends HttpServlet {
 		try {
 
 			String acao = request.getParameter("acao") != null ? request.getParameter("acao") : "listarTodos";
-			String ordemServico = request.getParameter("ordemServico");
+			String os = request.getParameter("os");
 
 			RequestDispatcher view = request.getRequestDispatcher("/cadastroOrdemServico.jsp");
 
 			if (acao.equalsIgnoreCase("delete")) {
-				// daoOrdemServico.delete(ordemSevico);
-				// request.setAttribute("ordens", daoOrdemServico.listar());
+				daoOrdemServico.delete(os);
+				request.setAttribute("ordens", daoOrdemServico.listar());
 
 			} else if (acao.equalsIgnoreCase("editar")) {
-				// beanOrdemServico = daoOrdemServico.consultar(ordemServico);
-				// request.setAttribute("ordemServico", beanUsuario);
+				beanOrdemServico = daoOrdemServico.consultar(os);
+				request.setAttribute("os", beanOrdemServico);
 
 			} else if (acao.equalsIgnoreCase("listartodos")) {
-				// request.setAttribute("ordens", daoOrdemServico.listar());
-				request.setAttribute("produtos", daoOrdemServico.listaProdutos());
-				
+				request.setAttribute("ordens", daoOrdemServico.listar());
+
 			}
 
-			// request.setAttribute("produtos", daoOrdemServico.listaProdutos());
+			request.setAttribute("produtos", daoOrdemServico.listaProdutos());
 			view.forward(request, response); // Confirmação do redirecionamento
 
 		} catch (Exception e) {
@@ -68,8 +67,8 @@ public class ServletOrdemServico extends HttpServlet {
 
 			try {
 				RequestDispatcher view = request.getRequestDispatcher("/cadastroOrdemServico.jsp");
-				// request.setAttribute("ordens", daoOrdemServico.listar());
-				// request.setAttribute("produtos", daoOrdemServico.listaProdutos());
+				request.setAttribute("ordens", daoOrdemServico.listar());
+				request.setAttribute("produtos", daoOrdemServico.listaProdutos());
 				view.forward(request, response);
 
 			} catch (Exception e) {
@@ -106,31 +105,31 @@ public class ServletOrdemServico extends HttpServlet {
 				// VALIDA SE OS CAMPOS ESTÃO PREENCHIDOS
 				if (dateEmissao == null || dateEmissao.isEmpty()) {
 					request.setAttribute("msg", "Campo Data Emissão está vazio");
-					request.setAttribute("ordemServico", beanOrdemServico);
+					request.setAttribute("os", beanOrdemServico);
 
-				} else if (dateEmissao.isEmpty()) {
-					request.setAttribute("msg", "Campo Data Emissão está vazio");
-					request.setAttribute("ordemServico", beanOrdemServico);
+				} else if (dataEntrega.isEmpty()) {
+					request.setAttribute("msg", "Campo Data Entrega está vazio");
+					request.setAttribute("os", beanOrdemServico);
 
 				} else if (quantidade.isEmpty()) {
 					request.setAttribute("msg", "Campo Quantidade está vazio");
-					request.setAttribute("ordemServico", beanOrdemServico);
+					request.setAttribute("os", beanOrdemServico);
 
 				} else if (status.isEmpty()) {
 					request.setAttribute("msg", "Campo Status está vazio");
-					request.setAttribute("ordemServico", beanOrdemServico);
+					request.setAttribute("os", beanOrdemServico);
 
 				} else if (codOs == null || codOs.isEmpty()) { // VERIFICA ID E SALVA PRODUTO
 					daoOrdemServico.salvar(beanOrdemServico);
 
 				} else { // ATUALIZA REGISTRO
-					// daoOrdemServico.atualizar(beanOrdemServico);
+					daoOrdemServico.atualizar(beanOrdemServico);
 				}
 
 				// REDIRECIONA A PÁGINA E LISTA OS PRODUTOS NOVAMENTE
-				RequestDispatcher view = request.getRequestDispatcher("/cadastroOrdenServico.jsp");
-				// request.setAttribute("usuarios", daoOrdemServico.listar());
-				// request.setAttribute("cargos", daoOrdemServico.listaProdutos());
+				RequestDispatcher view = request.getRequestDispatcher("/cadastroOrdemServico.jsp");
+				request.setAttribute("ordens", daoOrdemServico.listar());
+				request.setAttribute("produtos", daoOrdemServico.listaProdutos());
 				view.forward(request, response);
 
 			} catch (Exception e) {

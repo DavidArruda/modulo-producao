@@ -3,6 +3,7 @@
  */
 package daos;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -55,8 +56,8 @@ public class DaoUsuario {
 	public List<BeanTipoUsuario> listaTipoUsuario() throws Exception {
 		List<BeanTipoUsuario> retorno = new ArrayList<BeanTipoUsuario>();
 
-		String sql = "select * from tipo_usuario";
-		
+		String sql = "select codTipo, descricao from tipo_usuario";
+
 		PreparedStatement statement = connection.prepareStatement(sql);
 
 		ResultSet resultSet = statement.executeQuery();
@@ -65,7 +66,6 @@ public class DaoUsuario {
 			BeanTipoUsuario categoria = new BeanTipoUsuario();
 			categoria.setCodTipo(resultSet.getLong("codTipo"));
 			categoria.setDescricao(resultSet.getString("descricao"));
-			categoria.setSetor(resultSet.getString("setor"));
 
 			retorno.add(categoria);
 		}
@@ -73,13 +73,12 @@ public class DaoUsuario {
 		return retorno;
 
 	}
-	
-	
+
 	public List<BeanUsuario> listar() throws Exception {
 		List<BeanUsuario> lista = new ArrayList<BeanUsuario>();
 
-		String sql = "select us.codUsuario, us.nome, us.login, us.senha, tp.descricao\n" + 
-				"	from usuario us left outer join tipo_usuario tp on us.tipo_usuario = tp.codTipo;";
+		String sql = "select us.codUsuario, us.nome, us.login, us.senha, tp.descricao\n"
+				+ "	from usuario us left outer join tipo_usuario tp on us.tipo_usuario = tp.codTipo;";
 
 		PreparedStatement statement = connection.prepareStatement(sql);
 		ResultSet resultSet = statement.executeQuery();
@@ -100,7 +99,7 @@ public class DaoUsuario {
 		return lista;
 	}
 
-	public BeanUsuario consultar(String codUsuario) throws Exception { //consulta para atualização
+	public BeanUsuario consultar(String codUsuario) throws Exception { // consulta para atualização
 
 		String sql = ("select * from usuario where codUsuario ='" + codUsuario + "'");
 
@@ -121,7 +120,8 @@ public class DaoUsuario {
 	}
 
 	public void atualizar(BeanUsuario usuario) {
-		String sql = "update usuario set nome = ?, login = ?, senha = ?, tipo_usuario = ? where codUsuario = " + usuario.getCodUsuario();
+		String sql = "update usuario set nome = ?, login = ?, senha = ?, tipo_usuario = ? where codUsuario = "
+				+ usuario.getCodUsuario();
 
 		try {
 			PreparedStatement statement = connection.prepareStatement(sql);
@@ -171,4 +171,31 @@ public class DaoUsuario {
 		}
 
 	}
+
+	public void pSalvar(BeanUsuario usuario) {
+		String sql = "select insereUsuario(?, ?, ?, ?)";
+
+		try {
+			CallableStatement callableStatement = connection.prepareCall(sql);
+
+			callableStatement.setString(1, usuario.getNome());
+			callableStatement.setString(2, usuario.getLogin());
+			callableStatement.setString(3, usuario.getSenha());
+			callableStatement.setLong(4, usuario.getTipo_usuario().getCodTipo());
+			callableStatement.execute();
+
+			connection.commit();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			try {
+				connection.rollback();
+
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
+
 }
