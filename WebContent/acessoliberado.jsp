@@ -26,6 +26,7 @@
 		  	<td>Cad. Produto</td>
 		  	<td>Cad. Ficha</td>
 		  	<td>Cad. Processo</td>
+		  	<td>Cad. O.S</td>
 		  </tr>
 	
 	</table>

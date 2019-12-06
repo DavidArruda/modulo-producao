@@ -3,6 +3,7 @@
  */
 package beans;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -17,6 +18,7 @@ public class BeanOrdemServico {
 	private Integer quantidade;
 	private String status;
 	private BeanProduto produto = new BeanProduto();
+	private SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 
 	public Long getCodOs() {
 		return codOs;
@@ -66,4 +68,11 @@ public class BeanOrdemServico {
 		this.produto = produto;
 	}
 
+	public String getData() {
+		return format.format(dataEntrega);
+	}
+	
+	public String getDataEmissao() {
+		return format.format(dateEmissao);
+	}
 }

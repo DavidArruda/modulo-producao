@@ -1,13 +1,15 @@
 package beans;
 
+import java.time.LocalDateTime;
+
 public class BeanApontamento {
 
 	private Long codApontamento;
-	private String inicio;
-	private String termino;
-	private Long usuario;
-	private Long operacao;
-	private Long ordem_servico;
+	private LocalDateTime inicio;
+	private LocalDateTime termino;
+	private BeanUsuario usuario = new BeanUsuario();
+	private BeanOperacao operacao = new BeanOperacao();
+	private BeanOrdemServico ordem_servico = new BeanOrdemServico();
 
 	public Long getCodApontamento() {
 		return codApontamento;
@@ -17,44 +19,43 @@ public class BeanApontamento {
 		this.codApontamento = codApontamento;
 	}
 
-	public String getInicio() {
+	public LocalDateTime getInicio() {
 		return inicio;
 	}
 
-	public void setInicio(String inicio) {
+	public void setInicio(LocalDateTime inicio) {
 		this.inicio = inicio;
 	}
 
-	public String getTermino() {
+	public LocalDateTime getTermino() {
 		return termino;
 	}
 
-	public void setTermino(String termino) {
+	public void setTermino(LocalDateTime termino) {
 		this.termino = termino;
 	}
 
-	public Long getUsuario() {
+	public BeanUsuario getUsuario() {
 		return usuario;
 	}
 
-	public void setUsuario(Long usuario) {
+	public void setUsuario(BeanUsuario usuario) {
 		this.usuario = usuario;
 	}
 
-	public Long getOperacao() {
+	public BeanOperacao getOperacao() {
 		return operacao;
 	}
 
-	public void setOperacao(Long operacao) {
+	public void setOperacao(BeanOperacao operacao) {
 		this.operacao = operacao;
 	}
 
-	public Long getOrdem_servico() {
+	public BeanOrdemServico getOrdem_servico() {
 		return ordem_servico;
 	}
 
-	public void setOrdem_servico(Long ordem_servico) {
+	public void setOrdem_servico(BeanOrdemServico ordem_servico) {
 		this.ordem_servico = ordem_servico;
 	}
-
 }

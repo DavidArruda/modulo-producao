@@ -39,38 +39,7 @@
 					<tr>
 						<td><label>Código:</label></td>
 						<td><input type="text" readonly="readonly" id="codOs" name="codOs"
-							value="${os.codOs}" class="field-long" style="width: 193px;"> </td>
-					</tr>
-					
-					<tr>
-						<td><label>Produto:</label></td>
-						<td>
-							<select id="produtos" name="produto" style="width: 193px;"> 
-								<c:forEach items="${produtos}" var="pr">
-									<option value="${pr.codProduto}" id="${pr.codProduto}"
-										<c:if test="${pr.codProduto == os.produto.codProduto}">
-										<c:out value="selected=selected" />
-										</c:if>>
-									${pr.pn}
-									</option>
-								</c:forEach>
-							
-							</select>
-						</td>
-					</tr>
-
-					<tr>
-						<td><label>Quantidade:</label></td>
-						<td><input type="number" id="quantidade" name="quantidade"
-							placeholder="Informe a quantidade" value="${os.quantidade}"
-							maxlength="10"></td>
-					</tr>
-					
-					<tr>
-						<td><label>Status:</label></td>
-						<td><input type="text" id="status" name="status"
-							placeholder="Informe o status" value="${os.status}"
-							maxlength="10"></td>
+							value="${ap.codApontamento}" class="field-long" style="width: 193px;"> </td>
 					</tr>
 		
 					<tr>
