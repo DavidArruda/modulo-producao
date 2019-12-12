@@ -38,19 +38,19 @@
 				<table>
 					<tr>
 						<td><label>Código:</label></td>
-						<td><input type="text" readonly="readonly" id="codOs" name="codOs"
+						<td><input type="text" readonly="readonly" id="codApontamento" name="codApontamenot"
 							value="${ap.codApontamento}" class="field-long" style="width: 193px;"> </td>
 					</tr>
 		
 					<tr>
-						<td><label>Data Emissão:</label></td>
-						<td><input id="dateEmissao" name="dateEmissao" value="${os.dataEmissao}" style="width: 189px;"></td>
+						<td><label>Inicio:</label></td>
+						<td><input id="inicio" name="inicio" value="${ap.inicio}" style="width: 189px;"></td>
 					
 					</tr>
 					
 					<tr>
-						<td><label>Data Entrega:</label></td>
-						<td><input id="dataEntrega" name="dataEntrega" value="${os.data}" style="width: 189px;"></td>
+						<td><label>Termino:</label></td>
+						<td><input id="termino" name="termino" value="${ap.termino}" style="width: 189px;"></td>
 					</tr>
 
 					<tr>
